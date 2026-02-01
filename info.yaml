@@ -8,18 +8,17 @@ project:
   clock_hz:     10000000
 
   # MUST match the top-level Verilog module name
-  # TinyTapeout requires it to start with tt_um_
-  top_module: "tt_um_uwasic_onboarding"
+  top_module: "tt_um_uwasic_onboarding_yohance"
 
   # RTL source files (paths are relative to repo root)
   source_files:
+    - src/tt_um_uwasic_onboarding_yohance.v
     - src/project.v
     - src/spi_peripheral.v
     - src/pwm_peripheral.v
 
   tiles: "1x1"
 
-# Optional but recommended pin documentation
 pinout:
   # Inputs
   ui[0]: "SCLK"
@@ -41,7 +40,7 @@ pinout:
   uo[6]: "OUT_6"
   uo[7]: "OUT_7"
 
-  # Bidirectional pins
+  # Bidirectional pins (used here as outputs)
   uio[0]: "OUT_8"
   uio[1]: "OUT_9"
   uio[2]: "OUT_A"
@@ -51,5 +50,4 @@ pinout:
   uio[6]: "OUT_E"
   uio[7]: "OUT_F"
 
-# Do not change
 yaml_version: 6
