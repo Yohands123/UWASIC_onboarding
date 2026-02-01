@@ -1,63 +1,76 @@
-/*
- * Copyright (c) 2024 Yohance
- * SPDX-License-Identifier: Apache-2.0
+/* 
+ * TinyTapeout top module (must start with tt_um_)
+ * Rename your previous top module from:
+ *   module project (...)
+ * to:
+ *   module project_core (...)
+ *
+ * Then this wrapper becomes the required TT top module.
  */
 
-`default_nettype none
+module tt_um_uwasic_onboarding (
+    input  wire        clk,
+    input  wire        rst_n,
+    input  wire        ena,
 
-module tt_um_uwasic_onboarding_yohance (
-    input  wire [7:0] ui_in,    // Dedicated inputs
-    output wire [7:0] uo_out,    // Dedicated outputs
-    input  wire [7:0] uio_in,    // IOs: Input path
-    output wire [7:0] uio_out,   // IOs: Output path
-    output wire [7:0] uio_oe,    // IOs: Enable path (active high)
-    input  wire       ena,       // always 1 when powered
-    input  wire       clk,       // clock (10 MHz)
-    input  wire       rst_n       // reset_n - low to reset
+    input  wire [7:0]  ui_in,
+    output wire [7:0]  uo_out,
+
+    input  wire [7:0]  uio_in,
+    output wire [7:0]  uio_out,
+    output wire [7:0]  uio_oe
 );
 
-  // All uio pins are outputs
-  assign uio_oe = 8'hFF;
+    // ---------------------------------------------
+    // Default IO behavior (safe defaults)
+    // ---------------------------------------------
 
-  // SPI pin mapping
-  wire sclk = ui_in[0];
-  wire copi = ui_in[1];
-  wire ncs  = ui_in[2];
+    // If you are NOT using bidirectional IO, keep these:
+    assign uio_out = 8'b0000_0000;
+    assign uio_oe  = 8'b0000_0000;   // 0 = input, 1 = output
 
-  // SPI-written registers (0x00 - 0x04)
-  wire [7:0] en_reg_out_7_0;
-  wire [7:0] en_reg_out_15_8;
-  wire [7:0] en_reg_pwm_7_0;
-  wire [7:0] en_reg_pwm_15_8;
-  wire [7:0] pwm_duty_cycle;
+    // ---------------------------------------------
+    // Instantiate your real design here
+    // ---------------------------------------------
 
-  // SPI peripheral: decodes 16-bit write frames into registers
-  spi_peripheral spi_peripheral_inst (
-    .clk(clk),
-    .rst_n(rst_n),
-    .nCS(ncs),
-    .SCLK(sclk),
-    .COPI(copi),
-    .en_reg_out_7_0(en_reg_out_7_0),
-    .en_reg_out_15_8(en_reg_out_15_8),
-    .en_reg_pwm_7_0(en_reg_pwm_7_0),
-    .en_reg_pwm_15_8(en_reg_pwm_15_8),
-    .pwm_duty_cycle(pwm_duty_cycle)
-  );
+    project_core u_core (
+        .clk   (clk),
+        .rst_n (rst_n),
+        .ena   (ena),
 
-  // PWM peripheral: produces {uio_out[7:0], uo_out[7:0]}
-  pwm_peripheral pwm_peripheral_inst (
-    .clk(clk),
-    .rst_n(rst_n),
-    .en_reg_out_7_0(en_reg_out_7_0),
-    .en_reg_out_15_8(en_reg_out_15_8),
-    .en_reg_pwm_7_0(en_reg_pwm_7_0),
-    .en_reg_pwm_15_8(en_reg_pwm_15_8),
-    .pwm_duty_cycle(pwm_duty_cycle),
-    .out({uio_out, uo_out})
-  );
+        .ui_in (ui_in),
+        .uo_out(uo_out),
 
-  // Mark unused pins
-  wire _unused = &{ena, ui_in[7:3], uio_in, 1'b0};
+        .uio_in(uio_in)
+        // If your core uses uio_out/uio_oe, add them here and
+        // remove the default assigns above.
+    );
 
+endmodule
+
+
+// =============================================================
+// YOUR ORIGINAL PROJECT MODULE GOES BELOW (RENAMED)
+// =============================================================
+//
+// Change your old:
+//   module project (...)
+// to:
+//   module project_core (...)
+//
+// Keep everything else the same.
+//
+// Example port list template (YOU MUST MATCH YOUR REAL ONE):
+//
+module project_core (
+    input  wire       clk,
+    input  wire       rst_n,
+    input  wire       ena,
+
+    input  wire [7:0] ui_in,
+    output wire [7:0] uo_out,
+
+    input  wire [7:0] uio_in
+);
+    // --- paste your original contents here ---
 endmodule
