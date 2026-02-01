@@ -7,7 +7,7 @@ TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
 
 # Include ALL RTL that your top module instantiates
-PROJECT_SOURCES = project.v spi_peripheral.v pwm_peripheral.v
+PROJECT_SOURCES = tt_um_uwasic_onboarding_yohance.v project.v spi_peripheral.v pwm_peripheral.v
 
 ifneq ($(GATES),yes)
 
@@ -23,7 +23,8 @@ COMPILE_ARGS += -DGL_TEST
 COMPILE_ARGS += -DFUNCTIONAL
 COMPILE_ARGS += -DUSE_POWER_PINS
 COMPILE_ARGS += -DSIM
-COMPILE_ARGcd onboardingS += -DUNIT_DELAY=\#1
+COMPILE_ARGS += -DUNIT_DELAY=\#1
+
 VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v
 VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v
 
