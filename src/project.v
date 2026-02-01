@@ -12,21 +12,40 @@ module tt_um_uwasic_onboarding_yohance (
     output wire [7:0] uio_out,   // IOs: Output path
     output wire [7:0] uio_oe,    // IOs: Enable path (active high)
     input  wire       ena,       // always 1 when powered
-    input  wire       clk,       // clock
+    input  wire       clk,       // clock (10 MHz)
     input  wire       rst_n       // reset_n - low to reset
 );
 
-  // Set all uio pins to output
+  // All uio pins are outputs
   assign uio_oe = 8'hFF;
 
-  // SPI-written register wires
+  // SPI pin mapping
+  wire sclk = ui_in[0];
+  wire copi = ui_in[1];
+  wire ncs  = ui_in[2];
+
+  // SPI-written registers (0x00 - 0x04)
   wire [7:0] en_reg_out_7_0;
   wire [7:0] en_reg_out_15_8;
   wire [7:0] en_reg_pwm_7_0;
   wire [7:0] en_reg_pwm_15_8;
   wire [7:0] pwm_duty_cycle;
 
-  // PWM peripheral instance
+  // SPI peripheral: decodes 16-bit write frames into registers
+  spi_peripheral spi_peripheral_inst (
+    .clk(clk),
+    .rst_n(rst_n),
+    .nCS(ncs),
+    .SCLK(sclk),
+    .COPI(copi),
+    .en_reg_out_7_0(en_reg_out_7_0),
+    .en_reg_out_15_8(en_reg_out_15_8),
+    .en_reg_pwm_7_0(en_reg_pwm_7_0),
+    .en_reg_pwm_15_8(en_reg_pwm_15_8),
+    .pwm_duty_cycle(pwm_duty_cycle)
+  );
+
+  // PWM peripheral: produces {uio_out[7:0], uo_out[7:0]}
   pwm_peripheral pwm_peripheral_inst (
     .clk(clk),
     .rst_n(rst_n),
@@ -38,7 +57,7 @@ module tt_um_uwasic_onboarding_yohance (
     .out({uio_out, uo_out})
   );
 
-  // Mark unused signals
+  // Mark unused pins
   wire _unused = &{ena, ui_in[7:3], uio_in, 1'b0};
 
 endmodule

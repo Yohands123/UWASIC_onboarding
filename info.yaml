@@ -1,20 +1,19 @@
 # Tiny Tapeout project information
 project:
-  title:        "UWASIC Onboarding Project"      # Project title
-  author:       "Yohance"      # Your name
-  discord:      "yohance"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "A simple onboarding project for UWASIC."      # One line description of what your project does
-  language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
+  title:        "UWASIC Onboarding Project"
+  author:       "Yohance"
+  discord:      "yohance"
+  description:  "SPI-controlled PWM peripheral for Tiny Tapeout."
+  language:     "Verilog"
+  clock_hz:     10000000
 
-  # How many tiles your design occupies? A single tile is about 167x108 uM.
-  tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
+  tiles: "1x1"
 
-  # MUST match the module name in project.v
+# MUST match the module name in project.v
 top_module: "tt_um_uwasic_onboarding_yohance"
 
 source_files:
-  - "spi_peripheral.v"     # your SPI module (to be added later)
+  - spi_peripheral.v
   - pwm_peripheral.v
   - project.v
 
