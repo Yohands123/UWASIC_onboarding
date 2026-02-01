@@ -6,20 +6,17 @@ project:
   description:  "SPI-controlled PWM peripheral for Tiny Tapeout."
   language:     "Verilog"
   clock_hz:     10000000
+  tiles:        "1x1"
 
-  tiles: "1x1"
-
-# MUST match the module name in project.v
-top_module: "tt_um_uwasic_onboarding_yohance"
+  # MUST match the module name in project.v
+  top_module:   "tt_um_uwasic_onboarding_yohance"
 
 source_files:
-  - spi_peripheral.v
-  - pwm_peripheral.v
-  - project.v
+  - "spi_peripheral.v"
+  - "pwm_peripheral.v"
+  - "project.v"
 
-# NOT REQUIRED (but allowed)
 pinout:
-  # Inputs
   ui[0]: "SCLK"
   ui[1]: "COPI"
   ui[2]: "nCS"
@@ -29,7 +26,6 @@ pinout:
   ui[6]: ""
   ui[7]: ""
 
-  # Outputs
   uo[0]: "OUT_0"
   uo[1]: "OUT_1"
   uo[2]: "OUT_2"
@@ -39,7 +35,6 @@ pinout:
   uo[6]: "OUT_6"
   uo[7]: "OUT_7"
 
-  # Bidirectional pins
   uio[0]: "OUT_8"
   uio[1]: "OUT_9"
   uio[2]: "OUT_A"
