@@ -1,14 +1,11 @@
 /* 
  * TinyTapeout top module (must start with tt_um_)
- * Rename your previous top module from:
- *   module project (...)
- * to:
- *   module project_core (...)
- *
- * Then this wrapper becomes the required TT top module.
+ * This file contains:
+ *   1) The required TinyTapeout wrapper: tt_um_uwasic_onboarding_yohance
+ *   2) Your real design: project_core  (your old "module project" renamed)
  */
 
-module tt_um_uwasic_onboarding (
+module tt_um_uwasic_onboarding_yohance (
     input  wire        clk,
     input  wire        rst_n,
     input  wire        ena,
@@ -21,47 +18,30 @@ module tt_um_uwasic_onboarding (
     output wire [7:0]  uio_oe
 );
 
-    // ---------------------------------------------
-    // Default IO behavior (safe defaults)
-    // ---------------------------------------------
-
-    // If you are NOT using bidirectional IO, keep these:
+    // Safe defaults (not driving bidirectional IO)
     assign uio_out = 8'b0000_0000;
-    assign uio_oe  = 8'b0000_0000;   // 0 = input, 1 = output
+    assign uio_oe  = 8'b0000_0000;
 
-    // ---------------------------------------------
-    // Instantiate your real design here
-    // ---------------------------------------------
-
+    // Your real design lives here
     project_core u_core (
         .clk   (clk),
         .rst_n (rst_n),
         .ena   (ena),
-
         .ui_in (ui_in),
         .uo_out(uo_out),
-
         .uio_in(uio_in)
-        // If your core uses uio_out/uio_oe, add them here and
-        // remove the default assigns above.
     );
 
 endmodule
 
 
 // =============================================================
-// YOUR ORIGINAL PROJECT MODULE GOES BELOW (RENAMED)
+// YOUR ORIGINAL DESIGN GOES HERE
+// Rename old:  module project ( ... )
+// Into:        module project_core ( ... )
+// Then paste the FULL body (not empty).
 // =============================================================
-//
-// Change your old:
-//   module project (...)
-// to:
-//   module project_core (...)
-//
-// Keep everything else the same.
-//
-// Example port list template (YOU MUST MATCH YOUR REAL ONE):
-//
+
 module project_core (
     input  wire       clk,
     input  wire       rst_n,
@@ -72,5 +52,8 @@ module project_core (
 
     input  wire [7:0] uio_in
 );
-    // --- paste your original contents here ---
+
+    // >>> PASTE YOUR ENTIRE OLD "module project(...)" CONTENTS HERE <<<
+    // Must not be empty.
+
 endmodule
